@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fintrackdb
+    username: fintrack
+    password: fintrack
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    locations: filesystem:./flyway/migration
