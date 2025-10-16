@@ -30,8 +30,8 @@ class DefaultTransactionServiceTest {
     private DefaultTransactionService service;
 
     private final Transaction transaction = new Transaction(
-            Constants.TRANSACTION_ID,
-            Constants.AMOUNT,
+            Constants.LONG_1,
+            Constants.BIG_DECIMAL_100,
             Constants.FOOD,
             LocalDateTime.now()
     );
@@ -53,19 +53,19 @@ class DefaultTransactionServiceTest {
 
     @Test
     void shouldDeleteTransaction() {
-        service.deleteTransaction(Constants.TRANSACTION_ID);
+        service.deleteTransaction(Constants.LONG_1);
 
-        verify(repository).deleteById(Constants.TRANSACTION_ID);
+        verify(repository).deleteById(Constants.LONG_1);
     }
 
     @Test
     void shouldFindTransactionById() {
-        when(repository.findById(Constants.TRANSACTION_ID)).thenReturn(Optional.of(transaction));
+        when(repository.findById(Constants.LONG_1)).thenReturn(Optional.of(transaction));
 
-        Transaction actual = service.findTransactionById(Constants.TRANSACTION_ID).orElse(null);
+        Transaction actual = service.findTransactionById(Constants.LONG_1).orElse(null);
 
         assertThat(actual).isEqualTo(transaction);
-        verify(repository).findById(Constants.TRANSACTION_ID);
+        verify(repository).findById(Constants.LONG_1);
     }
 
     @Test
