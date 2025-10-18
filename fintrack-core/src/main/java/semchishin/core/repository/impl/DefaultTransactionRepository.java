@@ -8,8 +8,6 @@ import semchishin.core.model.Transaction;
 import semchishin.core.repository.CrudRepository;
 import semchishin.core.repository.SqlQueries;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,22 +43,17 @@ public class DefaultTransactionRepository implements CrudRepository<Transaction,
     /**
      * RowMapper to map each row of the ResultSet to a {@link Transaction} object.
      */
-    private static final RowMapper<Transaction> ROW_MAPPER = new RowMapper<>() {
-        @Override
-        public Transaction mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Transaction(
-                    rs.getLong("id"),
-                    rs.getBigDecimal("amount"),
-                    rs.getString("category"),
-                    rs.getTimestamp("created_at").toLocalDateTime()
-            );
-        }
-    };
+    private static final RowMapper<Transaction> ROW_MAPPER = (rs, rowNum) -> new Transaction(
+            rs.getLong("transaction_id"),
+            rs.getBigDecimal("amount"),
+            rs.getString("category"),
+            rs.getTimestamp("created_at").toLocalDateTime()
+    );
 
     /**
      * Name of the database table.
      */
-    private static final String TABLE_NAME = "transactions";
+    private static final String TABLE_NAME = "transaction";
 
     /**
      * Saves a new transaction into the database.
@@ -85,7 +78,7 @@ public class DefaultTransactionRepository implements CrudRepository<Transaction,
     public Optional<Transaction> findById(Long id) {
         String sql = String.format(SqlQueries.SELECT_BY_ID, TABLE_NAME);
         List<Transaction> list = jdbcTemplate.query(sql, ROW_MAPPER, id);
-        return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
+        return list.isEmpty() ? Optional.empty() : Optional.of(list.getFirst());
     }
 
     /**
