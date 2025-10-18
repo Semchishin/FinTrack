@@ -7,3 +7,5 @@ spring:
   flyway:
     enabled: true
     locations: filesystem:./flyway/migration
+    schemas: fintrack
+    default-schema: fintrack
